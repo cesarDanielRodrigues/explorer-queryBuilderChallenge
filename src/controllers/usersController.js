@@ -22,11 +22,15 @@ class usersController {
     response.status(201).json()
   }
   async index(request, response){
-    const {user_id} = request.params
+    const {id} = request.params
 
-    const user = await knex("")
+    const user = await knex("users").select("*").where({id}).first()
 
-    response.json()
+    if(!user){
+        throw new AppError("Usuário não encontrado")
+    }
+
+    response.json(user)
   }
 }
 

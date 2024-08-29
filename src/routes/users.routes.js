@@ -6,5 +6,7 @@ const usersController = new UsersController()
 
 usersRoutes.post("/", usersController.create)
 usersRoutes.get("/:id", usersController.index)
+usersRoutes.get("/", usersController.show)
+usersRoutes.put("/", usersController.update)
 
 module.exports = usersRoutes

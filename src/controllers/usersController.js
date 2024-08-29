@@ -32,6 +32,11 @@ class usersController {
 
     response.json(user)
   }
+  async show(request, response){
+    const users = await knex("users")
+
+    response.json(users)
+  }
 }
 
 module.exports = usersController

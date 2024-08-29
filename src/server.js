@@ -1,4 +1,4 @@
-require("express-async-errors")
+
 const error = require("./utils/error")
 const express = require("express")
 const routes = require("./routes")

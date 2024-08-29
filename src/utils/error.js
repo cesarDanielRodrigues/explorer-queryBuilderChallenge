@@ -1,3 +1,4 @@
+require("express-async-errors")
 const AppError = require("../utils/appError")
 const erro = (error, request, response, next) => {
     if(error instanceof AppError){

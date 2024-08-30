@@ -42,13 +42,11 @@ class usersController {
     const { name, email, password, old_password } = request.body
 
     const userExists = await knex("users").where({ id }).first()
-
     if (!userExists) {
       throw new AppError("Usuário não encontrado")
     }
 
     const emailAlreadyExist = await knex("users").where({ email }).first()
-
     if (emailAlreadyExist && emailAlreadyExist.id != userExists.id) {
       throw new AppError("Email informado já esta cadastrado")
     }
@@ -57,15 +55,22 @@ class usersController {
     userExists.email = email || userExists.email
 
     const oldPasswordIsNotEmpty = !old_password
-    const checkOldPassword 
-
-    if(password && oldPasswordIsNotEmpty){
+    if (password && oldPasswordIsNotEmpty) {
       throw new AppError("Por favor informe senha antiga")
     }
 
+    if (password && old_password) {
+      const checkOldPassword = await compare(old_password, userExists.password)
+      if (!checkOldPassword) {
+        throw new AppError("Senha antiga esta incorreta")
+      }
 
+      userExists.password = await hash(password, 8)
+    }
 
-    response.json()
+    await knex("users").update(userExists).where({ id })
+
+    return response.json({ status: "modificado" })
   }
 }
 

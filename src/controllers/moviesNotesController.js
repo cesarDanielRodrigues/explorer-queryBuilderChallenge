@@ -33,7 +33,8 @@ class MoviesNotesController {
     return response.status(201).json()
   }
   async index(request, response) {
-    const { title, user_id, tag } = request.query
+    const { title, tag } = request.query
+    const {user_id} = request.params
 
     let note
 
@@ -45,6 +46,7 @@ class MoviesNotesController {
         .whereLike("movie_notes.title", `%${title}`)
         .whereIn("movie_tags.name", filterTag)
         .innerJoin("movie_tags", "movie_tags.note_id", "movie_notes.id")
+        .groupBy("movie_notes.id")
     } else {
       note = await knex("movie_notes")
       .where({user_id})
@@ -62,6 +64,11 @@ class MoviesNotesController {
       }
     })
     return response.status(200).json(notesWithTags)
+  }
+  async show(request, response){
+   const notes = await knex("movie_notes")
+
+   response.json(notes)
   }
 }
 

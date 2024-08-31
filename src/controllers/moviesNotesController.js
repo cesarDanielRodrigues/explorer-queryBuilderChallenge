@@ -70,6 +70,19 @@ class MoviesNotesController {
 
    response.json(notes)
   }
+  async delete(request, response){
+    const {id} = request.params
+
+    const noteExist = await knex("movie_notes").where({id}).first()
+
+    if (!noteExist) {
+      throw new AppError("Nota não encontrada")
+    }
+
+    await knex("movie_notes").where({id}).delete()
+
+    response.json()
+  }
 }
 
 module.exports = MoviesNotesController

@@ -7,7 +7,7 @@ class usersController {
     const { name, email } = request.body
     const password = await hash(request.body.password, 8)
 
-    let userExist = await knex("users").where({ email }).first()
+    const userExist = await knex("users").where({ email }).first()
 
     if (userExist) {
       throw new AppError("Este e-mail já esta em uso")
@@ -71,6 +71,16 @@ class usersController {
     await knex("users").update(userExists).where({ id })
 
     return response.json({ status: "modificado" })
+  }
+  async delete(request,response){
+    const {id} = request.params
+
+    const userExist = await knex("users").where({id}).first()
+    if (!userExist) {
+      throw new AppError("Usuário não encontrado")
+    }
+
+    await knex("users").where({id}).delete()
   }
 }
 

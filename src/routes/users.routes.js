@@ -8,5 +8,6 @@ usersRoutes.post("/", usersController.create)
 usersRoutes.get("/:id", usersController.index)
 usersRoutes.get("/", usersController.show)
 usersRoutes.put("/:id", usersController.update)
+usersRoutes.delete("/:id", usersController.delete)
 
 module.exports = usersRoutes
